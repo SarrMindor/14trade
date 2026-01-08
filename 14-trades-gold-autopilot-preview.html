@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>14 Trades | Gold Autopilot — Cadre 200 pips</title>
+  <meta name="description" content="14 Trades | Gold Autopilot — Abonnement au bot XAUUSD basé sur des règles. Cadre 200 pips (non garanti)." />
+  <style>
+    :root{
+      --bg:#0B1220;
+      --panel:#121B2F;
+      --text:#FFFFFF;
+      --muted:#D0D8E8;
+      --muted2:#9AAFD4;
+      --gold:#FFD700;
+      --blue:#1A237E;
+      --line: rgba(199, 207, 221, .14);
+      --shadow: 0 18px 45px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 75% 10%, rgba(26,35,126,.55), transparent 55%),
+        radial-gradient(900px 500px at 15% 20%, rgba(255,215,0,.10), transparent 60%),
+        linear-gradient(180deg, #050914, var(--bg) 35%, #050914 120%);
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px; margin:0 auto; padding:0 22px}
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(5,9,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; letter-spacing:.2px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:99px;
+      background: var(--gold);
+      box-shadow: 0 0 0 6px rgba(255,215,0,.10);
+    }
+    .nav{
+      display:flex; gap:14px; align-items:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .nav a{opacity:.9; text-decoration:none}
+    .nav a:hover{opacity:1; color:#fff}
+    .cta-mini{display:flex; gap:10px; align-items:center;}
+    .btn{
+      border:1px solid transparent;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      transition: transform .12s ease, filter .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      background: linear-gradient(180deg, #FFE26A, var(--gold));
+      color:#0B1220;
+      box-shadow: 0 14px 30px rgba(255,215,0,.15);
+    }
+    .btn.primary:hover{filter:brightness(1.03)}
+    .btn.ghost{
+      background: transparent;
+      border-color: rgba(255,215,0,.55);
+      color: var(--gold);
+    }
+    .btn.ghost:hover{border-color: rgba(255,215,0,.95)}
+    .hero{padding:46px 0 10px;}
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:28px;
+      align-items:center;
+    }
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+      color: var(--gold);
+      border:1px solid rgba(255,215,0,.25);
+      background: rgba(255,215,0,.06);
+      padding:8px 12px;
+      border-radius:999px;
+      letter-spacing:.2px;
+    }
+    h1{
+      margin:18px 0 6px;
+      font-size: clamp(40px, 4.6vw, 72px);
+      line-height:1.05;
+      letter-spacing:-.6px;
+    }
+    .subtitle{
+      margin:0 0 18px;
+      font-size: clamp(18px, 2.2vw, 32px);
+      color: var(--gold);
+      font-weight:800;
+    }
+    .lead{
+      margin:0 0 18px;
+      color: var(--muted);
+      font-size:18px;
+      line-height:1.55;
+      max-width: 56ch;
+    }
+    .ticks{
+      margin:0 0 24px;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:10px;
+      color:#EAF0FF;
+    }
+    .ticks li{display:flex; gap:10px; align-items:flex-start; font-size:16px;}
+    .tick{
+      width:18px; height:18px; border-radius:6px;
+      background: rgba(255,215,0,.18);
+      border:1px solid rgba(255,215,0,.35);
+      display:inline-flex; align-items:center; justify-content:center;
+      color: var(--gold);
+      flex:0 0 18px;
+      margin-top:2px;
+      font-weight:900;
+    }
+    .hero-actions{display:flex; gap:12px; flex-wrap:wrap}
+    .note{margin-top:12px; color: var(--muted2); font-size:12px;}
+    .hero-card{
+      background:
+        radial-gradient(500px 300px at 40% 10%, rgba(255,215,0,.12), transparent 55%),
+        radial-gradient(500px 300px at 80% 70%, rgba(26,35,126,.55), transparent 60%),
+        linear-gradient(180deg, rgba(18,27,47,.82), rgba(18,27,47,.55));
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow:hidden;
+      position:relative;
+      min-height: 360px;
+    }
+    .mock{position:absolute; inset:0; padding:18px; display:flex; flex-direction:column; gap:12px;}
+    .mock-top{display:flex; justify-content:space-between; align-items:center; color: var(--muted2); font-size:12px;}
+    .chip{padding:6px 10px; border-radius:999px; border:1px solid var(--line); background: rgba(11,18,32,.45);}
+    .chart{
+      flex:1;
+      border-radius:16px;
+      border:1px solid rgba(199,207,221,.16);
+      background:
+        linear-gradient(180deg, rgba(5,9,20,.35), rgba(5,9,20,.72)),
+        repeating-linear-gradient(90deg, rgba(199,207,221,.08) 0px, rgba(199,207,221,.08) 1px, transparent 1px, transparent 34px),
+        repeating-linear-gradient(180deg, rgba(199,207,221,.06) 0px, rgba(199,207,221,.06) 1px, transparent 1px, transparent 28px);
+      position:relative;
+      overflow:hidden;
+    }
+    .candles{position:absolute; inset:14px 14px 18px 14px; display:flex; align-items:flex-end; gap:10px;}
+    .c{
+      width:14px; border-radius:5px;
+      position:relative;
+      background: rgba(46,204,113,.9);
+    }
+    .c::before{
+      content:"";
+      position:absolute; left:50%; transform:translateX(-50%);
+      top:-18px; height:18px; width:2px;
+      background: rgba(234,240,255,.55);
+      border-radius:2px;
+    }
+    .c.red{background: rgba(231,76,60,.9)}
+    .c.red::before{height:22px; top:-22px}
+    .c.big::before{height:28px; top:-28px}
+    .overlay-stamp{position:absolute; left:18px; bottom:18px; display:flex; gap:10px; flex-wrap:wrap;}
+    .stamp{
+      font-size:12px;
+      color: var(--muted);
+      border:1px solid var(--line);
+      background: rgba(11,18,32,.55);
+      padding:8px 10px;
+      border-radius:999px;
+    }
+    .bar{
+      margin:22px 0 0;
+      background: rgba(26,35,126,.35);
+      border:1px solid rgba(199,207,221,.18);
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+      font-size:14px;
+      text-align:center;
+    }
+    section{padding:56px 0}
+    .section-title{font-size: clamp(28px, 3vw, 44px); margin:0 0 22px; letter-spacing:-.3px;}
+    .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;}
+    .grid-4{display:grid; grid-template-columns: repeat(4, 1fr); gap:14px;}
+    .card{
+      background: linear-gradient(180deg, rgba(18,27,47,.9), rgba(18,27,47,.62));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    }
+    .card h3{margin:10px 0 8px; font-size:20px}
+    .card p{margin:0; color:var(--muted); line-height:1.55; font-size:15.5px}
+    .icon{
+      width:42px; height:42px; border-radius:14px;
+      background: rgba(255,215,0,.10);
+      border:1px solid rgba(255,215,0,.25);
+      display:flex; align-items:center; justify-content:center;
+      color: var(--gold);
+      font-weight:900;
+    }
+    .step{
+      display:flex; gap:12px; align-items:flex-start;
+      padding:18px 18px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background: rgba(18,27,47,.55);
+    }
+    .step b{display:block; margin-bottom:6px}
+    .step small{color:var(--muted); font-size:14px; line-height:1.45}
+    .pricing{display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; align-items:stretch;}
+    .plan{position:relative; overflow:hidden;}
+    .plan .name{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;}
+    .pill{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,215,0,.35); background: rgba(255,215,0,.08); color: var(--gold); white-space:nowrap;}
+    .price{font-size:40px; font-weight:900; color: var(--gold); margin:6px 0 12px; letter-spacing:-.5px;}
+    .price span{font-size:14px; color:var(--muted); font-weight:700}
+    .list{margin:0; padding:0; list-style:none; display:grid; gap:10px; color:#EAF0FF}
+    .list li{display:flex; gap:10px; align-items:flex-start; font-size:15px}
+    .x{color:#ffb0a9}
+    .plan .btn{width:100%; margin-top:16px}
+    .plan.pro{border-color: rgba(255,215,0,.40); box-shadow: 0 22px 55px rgba(255,215,0,.10); transform: translateY(-6px);}
+    .plan.pro::after{content:""; position:absolute; inset:-1px; border-radius: var(--radius); border:1px solid rgba(255,215,0,.45); pointer-events:none;}
+    .meaning{display:grid; grid-template-columns: 1fr 1fr; gap:18px; align-items:stretch;}
+    .meaning .good .icon{background: rgba(46,204,113,.12); border-color: rgba(46,204,113,.24); color: rgba(46,204,113,.95)}
+    .meaning .bad .icon{background: rgba(231,76,60,.10); border-color: rgba(231,76,60,.22); color: rgba(231,76,60,.95)}
+    .payrow{display:flex; flex-wrap:wrap; gap:10px; padding:16px; border-radius: 18px; border:1px solid var(--line); background: rgba(18,27,47,.55); color: var(--muted); font-weight:700;}
+    details{border:1px solid var(--line); background: rgba(18,27,47,.55); border-radius:18px; padding:14px 16px;}
+    details summary{cursor:pointer; font-weight:800; font-size:16px; color:#fff; list-style:none;}
+    details summary::-webkit-details-marker{display:none}
+    details p{margin:10px 0 0; color:var(--muted); line-height:1.55}
+    .faq{display:grid; gap:12px}
+    footer{padding:28px 0 48px; border-top:1px solid var(--line); background: rgba(5,9,20,.35);}
+    .footgrid{display:grid; grid-template-columns: 1.25fr .75fr; gap:18px; align-items:start;}
+    .links{display:flex; flex-wrap:wrap; gap:12px; justify-content:flex-end; color: var(--muted2); font-size:13px;}
+    .links a{text-decoration:none; opacity:.9}
+    .links a:hover{opacity:1; color:#fff}
+    .disclaimer{color: var(--muted2); font-size:12.5px; line-height:1.55; max-width: 95ch;}
+
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns:1fr; }
+      .hero-card{min-height: 340px}
+      .grid-3{grid-template-columns:1fr}
+      .grid-4{grid-template-columns:1fr 1fr}
+      .pricing{grid-template-columns:1fr}
+      .plan.pro{transform:none}
+      .meaning{grid-template-columns:1fr}
+      .nav{display:none}
+      .footgrid{grid-template-columns:1fr}
+      .links{justify-content:flex-start}
+    }
+    @media (max-width: 520px){
+      .grid-4{grid-template-columns:1fr}
+      .btn{width:100%}
+      .cta-mini{width:100%}
+      .hero-actions{gap:10px}
+    }
+/* Ajouter ces transitions */
+.hero-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hero-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+.card {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,215,0,0.3);
+}
+
+section:nth-child(even) {
+  background: linear-gradient(180deg, rgba(11,18,32,0.1), transparent);
+}
+
+/* Effet de brillance sur le bouton Pro */
+.plan.pro::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(45deg, transparent, rgba(255,215,0,0.1), transparent);
+  border-radius: var(--radius);
+  z-index: -1;
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Effet de particules subtiles dans le hero */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(255,215,0,0.05) 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, rgba(26,35,126,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* S'assurer que tous les éléments interactifs sont accessibles */
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Améliorer le contraste pour les textes importants */
+.price {
+  text-shadow: 0 2px 10px rgba(255,215,0,0.3);
+}
+/* Animation sur les ticks */
+.tick {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.tick:hover {
+  background-color: rgba(255,215,0,0.3);
+  transform: scale(1.1);
+}
+
+/* Effet sur les badges */
+.badge {
+  transition: all 0.2s ease;
+}
+.badge:hover {
+  border-color: rgba(255,215,0,0.5);
+  box-shadow: 0 0 15px rgba(255,215,0,0.1);
+}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand" onclick="window.location.href='index.html'">
+          <span class="dot"></span>
+          <span>14 Trades</span>
+        </div>
+
+        <nav class="nav" aria-label="Navigation">
+          <a href="#comment">Comment ça marche</a>
+          <a href="#pourquoi">Pourquoi</a>
+          <a href="#prix">Formules</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+
+        <div class="cta-mini">
+          <a class="btn ghost" href="#prix">Voir les formules</a>
+          <a class="btn primary" href="#prix">S’abonner</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <div class="badge">✨ 14 TRADES • XAUUSD • Automatisation basée sur des règles</div>
+
+            <h1>14 Trades | Gold Autopilot</h1>
+            <div class="subtitle">Cadre 200 pips</div>
+
+            <p class="lead">
+              Automatisation de trading sur l’or (XAUUSD) basée sur des règles, conçue pour capter de grands mouvements directionnels
+              lorsque les conditions de marché sont favorables.
+            </p>
+
+            <ul class="ticks">
+              <li><span class="tick">✓</span><span><b>Tendance + zones clés</b> (support / résistance)</span></li>
+              <li><span class="tick">✓</span><span><b>Gestion du risque incluse</b> (discipline 14 Trades)</span></li>
+              <li><span class="tick">✓</span><span><b>Accès par abonnement</b> (mises à jour continues)</span></li>
+            </ul>
+
+            <div class="hero-actions" id="subscribe">
+              <a class="btn primary" href="#prix">S’abonner maintenant</a>
+              <a class="btn ghost" href="#prix">Voir les formules</a>
+            </div>
+
+            <div class="note">Outil de trading • Pas un service d’investissement • Aucun résultat garanti.</div>
+          </div>
+
+          <div class="hero-card" aria-label="Aperçu graphique">
+            <div class="mock">
+              <div class="mock-top">
+                <span class="chip">Mode sombre • XAUUSD</span>
+                <span class="chip">Cadre: 200 pips</span>
+              </div>
+
+              <div class="chart" aria-hidden="true">
+                <div class="candles">
+                  <div class="c red" style="height:70px"></div>
+                  <div class="c" style="height:95px"></div>
+                  <div class="c" style="height:120px"></div>
+                  <div class="c red big" style="height:62px"></div>
+                  <div class="c" style="height:140px"></div>
+                  <div class="c" style="height:165px"></div>
+                  <div class="c red" style="height:90px"></div>
+                  <div class="c" style="height:185px"></div>
+                  <div class="c" style="height:210px"></div>
+                  <div class="c red" style="height:110px"></div>
+                </div>
+
+                <div class="overlay-stamp">
+                  <span class="stamp">Tendance ✔</span>
+                  <span class="stamp">Zone clé ✔</span>
+                  <span class="stamp">Risque ✔</span>
+                </div>
+              </div>
+
+              <div class="mock-top">
+                <span class="chip">Règle: 1 trade / jour</span>
+                <span class="chip">Règle: journal obligatoire</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bar">
+          Accès par abonnement • Mises à jour incluses • Règles de risque 14 Trades
+        </div>
+      </div>
+    </section>
+
+    <section id="comment">
+      <div class="wrap">
+        <h2 class="section-title">Comment ça fonctionne</h2>
+
+        <div class="grid-4">
+          <div class="step">
+            <div class="icon">1</div>
+            <div>
+              <b>Choisis ta formule</b>
+              <small>Basic, Pro ou Elite selon ton niveau et le nombre de comptes.</small>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="icon">2</div>
+            <div>
+              <b>Paiement sécurisé</b>
+              <small>Accès immédiat après paiement et activation de la licence.</small>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="icon">3</div>
+            <div>
+              <b>Bot + guide reçus</b>
+              <small>Instructions claires : installation + règles de risque 14 Trades.</small>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="icon">4</div>
+            <div>
+              <b>Application & trading</b>
+              <small>Exécution uniquement lorsque les conditions de marché sont réunies.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pourquoi">
+      <div class="wrap">
+        <h2 class="section-title">Pourquoi Gold Autopilot ?</h2>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="icon">✓</div>
+            <h3>Règles & Discipline</h3>
+            <p>Cadre clair : tendance, zones clés (support/résistance) et timing. Pas de place pour l’émotion.</p>
+          </div>
+
+          <div class="card">
+            <div class="icon">⚙</div>
+            <h3>Gestion du Risque</h3>
+            <p>Règles simples pour limiter les erreurs : FOMO, sur-trading, SL déplacé, entrée hors zone.</p>
+          </div>
+
+          <div class="card">
+            <div class="icon">↻</div>
+            <h3>Mises à jour continues</h3>
+            <p>L’abonnement te donne accès aux optimisations, améliorations et ajustements au fil du marché.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="prix">
+      <div class="wrap">
+        <h2 class="section-title">Formules d’abonnement</h2>
+
+        <div class="pricing">
+          <div class="card plan">
+            <div class="name">
+              <h3 style="margin:0">BASIC</h3>
+              <span class="pill">Starter 14 Trades</span>
+            </div>
+            <div class="price">$49 <span>/ mois</span></div>
+
+            <ul class="list">
+              <li><span class="tick">✓</span> Bot Gold (cadre 200 pips)</li>
+              <li><span class="tick">✓</span> 1 compte de trading</li>
+              <li><span class="tick">✓</span> Guide risque & installation (PDF)</li>
+              <li><span class="tick x">✕</span> Pas de support privé</li>
+            </ul>
+
+            <a class="btn ghost" href="#contact">Choisir BASIC</a>
+          </div>
+
+          <div class="card plan pro">
+            <div class="name">
+              <h3 style="margin:0">PRO</h3>
+              <span class="pill">⭐ Populaire</span>
+            </div>
+            <div class="price">$99 <span>/ mois</span></div>
+
+            <ul class="list">
+              <li><span class="tick">✓</span> Bot Gold</li>
+              <li><span class="tick">✓</span> Jusqu’à 3 comptes</li>
+              <li><span class="tick">✓</span> Guide complet d’installation</li>
+              <li><span class="tick">✓</span> Règles de gestion du risque</li>
+              <li><span class="tick">✓</span> Explication de la logique (sans code)</li>
+              <li><span class="tick">✓</span> Mises à jour prioritaires</li>
+            </ul>
+
+            <a class="btn primary" href="#contact">Choisir PRO</a>
+          </div>
+
+          <div class="card plan">
+            <div class="name">
+              <h3 style="margin:0">ELITE</h3>
+              <span class="pill">Pro / Team</span>
+            </div>
+            <div class="price">$199 <span>/ mois</span></div>
+
+            <ul class="list">
+              <li><span class="tick">✓</span> Bot Gold</li>
+              <li><span class="tick">✓</span> Comptes illimités</li>
+              <li><span class="tick">✓</span> Optimisation avancée du risque</li>
+              <li><span class="tick">✓</span> Accès canal privé (Telegram)</li>
+              <li><span class="tick">✓</span> Accès anticipé aux mises à jour</li>
+            </ul>
+
+            <a class="btn ghost" href="#contact">Choisir ELITE</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2 class="section-title">Que signifie vraiment “200 pips” ?</h2>
+
+        <div class="meaning">
+          <div class="card good">
+            <div class="icon">✓</div>
+            <h3 style="margin:10px 0 8px">Ce que ça veut dire</h3>
+            <ul class="list">
+              <li><span class="tick">✓</span> L’or peut faire 200 pips ou plus.</li>
+              <li><span class="tick">✓</span> Le bot vise les grands mouvements quand les conditions sont réunies.</li>
+              <li><span class="tick">✓</span> Discipline + zones + tendance = priorité.</li>
+            </ul>
+          </div>
+
+          <div class="card bad">
+            <div class="icon">✕</div>
+            <h3 style="margin:10px 0 8px">Ce que ça ne veut pas dire</h3>
+            <ul class="list">
+              <li><span class="tick x">✕</span> Pas quotidien.</li>
+              <li><span class="tick x">✕</span> Pas garanti.</li>
+              <li><span class="tick x">✕</span> Pas “no loss”, pas “95–100% win rate”.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2 class="section-title">Moyens de paiement</h2>
+        <div class="payrow">
+          <span class="chip">PayPal</span>
+          <span class="chip">Crypto (USDT / BTC)</span>
+          <span class="chip">Wave</span>
+          <span class="chip">Orange Money</span>
+          <span class="chip">Virement bancaire</span>
+        </div>
+        <div class="note" style="margin-top:10px">
+          Tu peux afficher un seul moyen de paiement au début, puis ajouter les autres progressivement.
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <h2 class="section-title">Questions fréquentes</h2>
+
+        <div class="faq">
+          <details open>
+            <summary>Est-ce garanti ?</summary>
+            <p>Non. Le trading comporte des risques. Gold Autopilot est un outil basé sur des règles. Les résultats varient selon le marché, le risque et la discipline.</p>
+          </details>
+
+          <details>
+            <summary>Ça marche sur quel actif ?</summary>
+            <p>Sur <b>XAUUSD (Gold)</b>.</p>
+          </details>
+
+          <details>
+            <summary>Combien de comptes puis-je utiliser ?</summary>
+            <p>Selon la formule : 1 (Basic), jusqu’à 3 (Pro), illimité (Elite).</p>
+          </details>
+
+          <details>
+            <summary>Je peux annuler quand je veux ?</summary>
+            <p>Oui, tu peux arrêter ton abonnement à tout moment (la licence se désactive à la fin de la période payée).</p>
+          </details>
+
+          <details>
+            <summary>Vous remboursez ?</summary>
+            <p>Non. Produit numérique : une fois l’accès accordé, aucun remboursement.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <h2 class="section-title">Prêt à commencer ?</h2>
+        <div class="card">
+          <p style="margin:0 0 14px;color:var(--muted);font-size:16px;line-height:1.55">
+            Remplace ces boutons par ton système de paiement (PayPal / Crypto / Wave / Orange Money).<br/>
+            Tu peux aussi rediriger vers WhatsApp avec un message prérempli.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#">Payer & activer la licence</a>
+            <a class="btn ghost" href="#">Parler sur WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footgrid">
+        <div class="disclaimer">
+          <b>Disclaimer :</b> Le trading comporte des risques. Les performances passées ne garantissent pas les résultats futurs.
+          Ce logiciel est un outil de trading, et non un service d’investissement. Aucun profit ni nombre fixe de pips n’est garanti.
+          L’utilisateur est seul responsable de ses décisions et de son risque.
+        </div>
+        <div class="links">
+          <a href="#">Disclaimer</a>
+          <a href="#">Termes</a>
+          <a href="#">Confidentialité</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
