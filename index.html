@@ -620,6 +620,62 @@
         justify-content: center;
       }
     }
+
+    /* wrapper */
+.premium-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+/* premium pill button */
+.btn-premium {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+  padding: 14px 30px;
+
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  background: transparent;
+
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  box-shadow:
+    0 0 0 1px rgba(255, 207, 51, 0.1),
+    0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.btn-premium:hover {
+  background: var(--gold);
+  color: #050814;
+  transform: translateY(-3px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.85);
+}
+
+/* icon style */
+.btn-premium img {
+  width: 20px;
+  height: 20px;
+  filter: invert(80%) sepia(60%) saturate(600%) hue-rotate(10deg);
+}
+
+.btn-premium:hover img {
+  filter: brightness(0);
+}
   </style>
 </head>
 <body>
@@ -675,50 +731,22 @@
     <p class="hero-disclaimer">*Le trading comporte des risques. Les résultats dépendent des conditions de marché et de la discipline d'exécution.</p>
   </section>
 
-  <div style="text-align:center; margin-top:25px;">
+  <div class="premium-buttons">
 
-    <!-- Title -->
-    <h3 style="color:#ffffff; font-size:22px; font-weight:600; margin-bottom:8px;">
-        Rejoindre 14 Trades
-    </h3>
-
-    <!-- Description -->
-    <p style="color:#8b96ac; font-size:15px; margin-bottom:18px;">
-        Accédez à l’écosystème 14 Trades : outils premium, signaux structurés, bot de trading et stratégies exclusives.
-    </p>
-
-    <!-- Join Box (Clickable) -->
-    <a href="https://t.me/sadikh_sarr" target="_blank" style="text-decoration:none;">
-        <div style="
-            display:inline-block;
-            background:rgba(255,255,255,0.05);
-            padding:18px 25px;
-            border-radius:12px;
-            border:1px solid rgba(255,255,255,0.10);
-            transition:0.3s ease;
-        ">
-            <p style="color:#ffffff; font-size:16px; margin:0 0 10px 0;">
-                Rejoindre sur Telegram
-            </p>
-
-            <div style="
-                background:#0f1525;
-                padding:12px 18px;
-                border-radius:8px;
-                font-size:18px;
-                font-weight:700;
-                color:#FFD700;
-                letter-spacing:1px;
-                border:1px solid rgba(255,255,255,0.15);
-            ">
-                CLIQUER ICI
-            </div>
-        </div>
+    <!-- Telegram Button -->
+    <a href="https://t.me/+ru2qOiFJvjI1NzMy" target="_blank" class="btn-premium">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/telegram.svg" alt="Telegram">
+      Rejoindre Telegram
     </a>
+  
+    <!-- YouTube Button -->
+    <a href="https://youtu.be/jwPkJz8-kI8?si=MfyVHewPjbDKpsf5" target="_blank" class="btn-premium">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube">
+      Rejoindre YouTube
+    </a>
+  
+  </div>
 
-</div>
-
-</div>
 
   <!-- About -->
   <section id="about" class="animate-section">
