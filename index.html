@@ -676,6 +676,83 @@
 .btn-premium:hover img {
   filter: brightness(0);
 }
+
+/* ===== GLOBAL HERO SECTION ===== */
+.hero-ga200 {
+  background: radial-gradient(circle at top, #111827 0, #020617 60%, #000 100%);
+  color: #e5e7eb;
+  padding: 80px 16px;
+  text-align: center;
+}
+
+.hero-ga200-inner {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* ===== BADGES ===== */
+.hero-ga200-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 26px;
+}
+
+.hero-ga200-badges .badge {
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.9);
+  border: 1px solid rgba(250,204,21,0.6);
+  color: #facc15;
+}
+
+/* ===== TITLES ===== */
+.hero-ga200-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #f9fafb;
+  margin-bottom: 16px;
+}
+
+.hero-ga200-lead {
+  font-size: 15px;
+  color: #cbd5e1;
+  max-width: 620px;
+  margin: 0 auto 24px;
+}
+
+/* ===== BUTTON "COPIER MAINTENANT" ===== */
+.hero-ga200-btn {
+  display: inline-block;
+  padding: 12px 36px;
+  border-radius: 999px;
+  background: #facc15;
+  color: #111827;
+  font-weight: 800;
+  font-size: 15px;
+  text-decoration: none;
+  margin-top: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.hero-ga200-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+}
+
+/* ===== WARNING ===== */
+.hero-ga200-warning {
+  margin-top: 20px;
+  font-size: 11px;
+  color: #94a3b8;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
   </style>
 </head>
 <body>
@@ -747,6 +824,45 @@
   
   </div>
 
+  <section class="hero-ga200">
+    <div class="hero-ga200-inner">
+  
+      <!-- BADGES -->
+      <div class="hero-ga200-badges">
+        <span class="badge">Copy-trading</span>
+        <span class="badge">100% automatisé</span>
+        <span class="badge">Gold (XAUUSD)</span>
+        <span class="badge">1 trade / jour</span>
+      </div>
+  
+      <!-- HEADER -->
+      <h1 class="hero-ga200-title">
+        Automatisez votre trading sur l’Or — sans MT5, sans stress.
+      </h1>
+  
+      <!-- SUBTEXT -->
+      <p class="hero-ga200-lead">
+        Vous copiez automatiquement mes trades réels grâce à un système de copy-trading
+        simple, intelligent et 100% automatisé. Aucun réglage, aucune plateforme MT5.
+        Connectez votre compte et laissez le système travailler pour vous.
+      </p>
+  
+      <!-- COPY NOW BUTTON (French) -->
+      <a href="https://my.hfm.com/en/copy-trading/provider-details?provider=147023312"
+         class="hero-ga200-btn"
+         target="_blank">
+        COPIER MAINTENANT
+      </a>
+  
+      <!-- WARNING -->
+      <p class="hero-ga200-warning">
+        <strong>Avertissement :</strong> le copy-trading comporte des risques.
+        Les performances passées ne garantissent pas les résultats futurs.
+        N’investissez que ce que vous pouvez vous permettre de perdre.
+      </p>
+  
+    </div>
+  </section>
 
   <!-- About -->
   <section id="about" class="animate-section">
