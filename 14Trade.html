@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://14trades-pwa.vercel.app/access.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#C9A84C">
+<title>14 Trades Alert</title>
+<link rel="apple-touch-icon" href="https://14trades-pwa.vercel.app/icons/apple-touch-icon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0C0C0C;--s1:#131313;--s2:#1A1A1A;--border:#222;--gold:#C9A84C;--gold2:#E8C96A;--white:#F0F0F0;--muted:#555;--green:#00C87A;--red:#FF3B4E;--blue:#4A9EFF}
+html,body{min-height:100%;background:var(--bg);font-family:'Inter',sans-serif;color:var(--white);-webkit-font-smoothing:antialiased}
+body{display:flex;justify-content:center;padding:0;margin:0}
+.screen{width:100%;max-width:390px;min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+
+/* BG */
+.bg-glow{position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:350px;height:350px;background:radial-gradient(ellipse,#C9A84C0D 0%,transparent 70%);pointer-events:none;z-index:0}
+.bg-lines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 40px,#C9A84C03 40px,#C9A84C03 41px);pointer-events:none;z-index:0}
+
+/* HEADER */
+.header{padding:20px 22px 16px;display:flex;align-items:center;justify-content:space-between;z-index:1}
+.logo-row{display:flex;align-items:center;gap:2px}
+.logo-num{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--gold)}
+.logo-bolt{font-size:22px;color:var(--gold2)}
+.logo-sub{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-top:2px}
+.live-badge{display:flex;align-items:center;gap:6px;background:#00C87A15;border:1px solid #00C87A25;border-radius:20px;padding:5px 12px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.live-txt{font-size:10px;font-weight:600;color:var(--green);letter-spacing:.5px}
+
+/* HERO */
+.hero{padding:0 22px;z-index:1;display:flex;flex-direction:column;gap:6px}
+.hero-tag{display:flex;align-items:center;gap:8px}
+.hero-tag-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:.6}
+.hero-tag-txt{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.hero-title{font-size:26px;font-weight:700;color:var(--white);line-height:1.2;letter-spacing:-.5px}
+.hero-title span{color:var(--gold)}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.5;margin-top:2px}
+
+/* LIVE PRICES */
+.prices-bar{margin:16px 22px 0;background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:1}
+.price-item{display:flex;flex-direction:column;gap:3px;align-items:center}
+.price-asset{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.price-val{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--white)}
+.price-change{font-family:'Space Mono',monospace;font-size:9px;font-weight:600}
+.price-divider{width:1px;height:36px;background:var(--border)}
+
+/* BLURRED SIGNAL CARD */
+.signal-preview{margin:14px 22px 0;position:relative;z-index:1}
+.sp-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:16px;filter:blur(5px);pointer-events:none;user-select:none}
+.sp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sp-live{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.sp-dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
+.sp-asset{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--gold)}
+.sp-dir{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;color:var(--green);margin-bottom:8px}
+.sp-levels{display:flex;flex-direction:column;gap:6px}
+.sp-level{background:#00C87A08;border:1px solid #00C87A15;border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between}
+.sp-level-lbl{font-size:10px;font-weight:700;color:#006B42}
+.sp-level-val{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--green)}
+.sp-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:16px;background:rgba(12,12,12,.6);backdrop-filter:blur(2px)}
+.sp-lock{font-size:28px}
+.sp-lock-txt{font-size:12px;font-weight:600;color:var(--gold);text-align:center;letter-spacing:.3px}
+.sp-lock-sub{font-size:10px;color:var(--muted);text-align:center}
+
+/* MEMBER COUNT */
+.member-count{margin:14px 22px 0;display:flex;align-items:center;gap:10px;z-index:1}
+.mc-avatars{display:flex}
+.mc-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#E8C96A);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#000;margin-left:-8px}
+.mc-avatar:first-child{margin-left:0}
+.mc-text{font-size:12px;color:var(--muted);line-height:1.4}
+.mc-text strong{color:var(--white);font-weight:600}
+
+/* RESULTS */
+.results-row{margin:14px 22px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;z-index:1}
+.result-box{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:10px 8px;text-align:center}
+.result-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700}
+.result-lbl{font-size:8px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-top:2px}
+
+/* DIVIDER */
+.divider-line{margin:20px 22px 0;display:flex;align-items:center;gap:10px;z-index:1}
+.dl{flex:1;height:1px;background:linear-gradient(90deg,transparent,#C9A84C20)}
+.dr{flex:1;height:1px;background:linear-gradient(270deg,transparent,#C9A84C20)}
+.dc{font-size:9px;color:var(--muted);letter-spacing:1px;white-space:nowrap}
+
+/* FORM */
+.form-wrap{margin:16px 22px 0;display:flex;flex-direction:column;gap:10px;z-index:1}
+.form-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.form-input{width:100%;background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:15px 16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--white);outline:none;transition:all .3s;-webkit-appearance:none}
+.form-input:focus{border-color:#C9A84C40;background:#0C0B00}
+.form-input::placeholder{color:#333}
+.form-input.error{border-color:#FF3B4E50;background:#100505}
+.form-input.success{border-color:#00C87A50;background:#001A0F}
+.code-input{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;letter-spacing:6px;text-align:center;text-transform:uppercase}
+.access-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;padding:17px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#000;cursor:pointer;letter-spacing:1.5px;transition:all .2s;position:relative;overflow:hidden}
+.access-btn:active{transform:scale(.97)}
+.access-btn:disabled{opacity:.4;cursor:default;transform:none}
+.btn-shine{position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer 3s ease infinite}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+.error-msg{font-size:11px;color:var(--red);text-align:center;min-height:14px}
+.success-msg{font-size:11px;color:var(--green);text-align:center;min-height:14px;display:none}
+
+/* FOOTER */
+.footer{margin:20px 22px 40px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:1}
+.footer-txt{font-size:10px;color:#2A2A2A;text-align:center;line-height:1.8}
+.footer-txt strong{color:#3A3A3A}
+.lang-row{display:flex;gap:6px}
+.lp{padding:4px 12px;border-radius:16px;font-size:9px;font-weight:700;cursor:pointer;border:1px solid #222;background:none;color:#444;font-family:'Inter',sans-serif;transition:all .2s}
+.lp.active{background:#C9A84C15;color:var(--gold);border-color:#C9A84C30}
+</style>
+</head>
+<body>
+<script>
+// Check if trial expired
+const params = new URLSearchParams(window.location.search);
+if (params.get('expired') === 'trial') {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Show expired banner
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:#2A0A0A;border-bottom:1px solid #FF453A30;padding:12px 20px;text-align:center;font-family:Inter,sans-serif';
+    banner.innerHTML = `
+      <div style="font-size:13px;font-weight:700;color:#FF453A;margin-bottom:4px">⏰ Your 7-day trial has expired</div>
+      <div style="font-size:12px;color:#636366;line-height:1.5">To continue receiving signals, contact Sadikh on WhatsApp to get your monthly access code.</div>
+      <a href="https://wa.me/79612784457" style="display:inline-block;margin-top:8px;background:#25D366;color:#000;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;text-decoration:none;font-family:Inter,sans-serif">💬 Contact on WhatsApp</a>
+    `;
+    document.body.insertBefore(banner, document.body.firstChild);
+
+    // Update hero text
+    const heroSub = document.getElementById('hero-sub');
+    if (heroSub) heroSub.textContent = 'Enter your monthly access code to continue.';
+  });
+}
+</script>
+
+<div class="bg-glow"></div>
+<div class="bg-lines"></div>
+
+<div class="screen">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="logo-row"><span class="logo-num">14</span><span class="logo-bolt">⚡</span></div>
+      <div class="logo-sub">Trades Alert</div>
+    </div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <div class="live-txt">LIVE</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag"><div class="hero-tag-dot"></div><div class="hero-tag-txt">Gold · BTC · Premium Signals</div></div>
+    <div class="hero-title">I do the work.<br><span>You take the trade.</span></div>
+    <div class="hero-sub" id="hero-sub">High probability setups — straight to your phone.</div>
+  </div>
+
+  <!-- LIVE PRICES -->
+  <div class="prices-bar">
+    <div class="price-item">
+      <div class="price-asset" style="color:var(--gold)">XAU/USD</div>
+      <div class="price-val" id="gold-price">--</div>
+      <div class="price-change" id="gold-change" style="color:var(--green)">--</div>
+    </div>
+    <div class="price-divider"></div>
+    <div class="price-item">
+      <div class="price-asset" style="color:#F0921A">BTC/USD</div>
+      <div class="price-val" id="btc-price">$63 534</div>
+      <div class="price-change" id="btc-change" style="color:var(--green)">+2.89%</div>
+    </div>
+    <div class="price-divider"></div>
+    <div class="price-item">
+      <div class="price-asset" style="color:var(--muted)">Session</div>
+      <div class="price-val" id="session-val" style="font-size:12px">NY</div>
+      <div class="price-change" id="session-status" style="color:var(--gold)">Open</div>
+    </div>
+  </div>
+
+  <!-- BLURRED SIGNAL CARD -->
+  <div class="signal-preview">
+    <div class="sp-card">
+      <div class="sp-top">
+        <div class="sp-live"><div class="sp-dot"></div>Live trade</div>
+        <div class="sp-asset">GOLD · XAU</div>
+      </div>
+      <div class="sp-dir">BUY</div>
+      <div class="sp-levels">
+        <div class="sp-level"><div class="sp-level-lbl">TP 1</div><div class="sp-level-val">Hit ✓</div></div>
+        <div class="sp-level"><div class="sp-level-lbl">TP 2</div><div class="sp-level-val">Running...</div></div>
+      </div>
+    </div>
+    <div class="sp-overlay">
+      <div class="sp-lock">🔐</div>
+      <div class="sp-lock-txt" id="lock-txt">Members only</div>
+      <div class="sp-lock-sub" id="lock-sub">Enter your access code to see live signals</div>
+    </div>
+  </div>
+
+  <!-- MEMBER COUNT -->
+  <div class="member-count">
+    <div class="mc-avatars">
+      <div class="mc-avatar">S</div>
+      <div class="mc-avatar">A</div>
+      <div class="mc-avatar">M</div>
+      <div class="mc-avatar">+</div>
+    </div>
+    <div class="mc-text" id="mc-text"><strong id="mc-count">47</strong> traders already getting live signals</div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-row">
+    <div class="result-box">
+      <div class="result-val" style="color:var(--green)" id="res-winrate">100%</div>
+      <div class="result-lbl">Win Rate</div>
+    </div>
+    <div class="result-box">
+      <div class="result-val" style="color:var(--gold)" id="res-signals">1</div>
+      <div class="result-lbl">Signals</div>
+    </div>
+    <div class="result-box">
+      <div class="result-val" style="color:var(--blue)">$100</div>
+      <div class="result-lbl">Per Month</div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="divider-line"><div class="dl"></div><div class="dc" id="div-txt">Enter your access code</div><div class="dr"></div></div>
+
+  <div class="form-wrap">
+    <div class="form-label" id="lbl-email">Your email</div>
+    <input class="form-input" id="email-input" type="email" placeholder="you@example.com" autocomplete="email" oninput="clearErrors()">
+
+    <div class="form-label" id="lbl-code">Access code</div>
+    <input class="form-input code-input" id="code-input" type="text" maxlength="9" placeholder="XXXX-XXXX" autocomplete="off" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase();clearErrors()" onkeydown="if(event.key===&#39;Enter&#39;)submitAccess()">
+
+    <button class="access-btn" id="access-btn" onclick="submitAccess()">ACCESS ⚡<div class="btn-shine"></div>
+    </button>
+    <div class="error-msg" id="error-msg"></div>
+    <div class="success-msg" id="success-msg"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-txt" id="footer-txt"><strong>Gold · BTC</strong> · Premium signals · Real-time alerts<br>Wave · Crypto · $100/month</div>
+    <div class="lang-row">
+      <button class="lp active" id="lang-en" onclick="setLang(&#39;en&#39;)">EN</button>
+      <button class="lp" id="lang-fr" onclick="setLang(&#39;fr&#39;)">FR</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SERVER = 'https://14trades-server-production.up.railway.app';
+let lang = localStorage.getItem('14t_lang') || 'en';
+
+const L = {
+  en: {
+    hero_sub: 'High probability setups — straight to your phone.',
+    lock_txt: 'Members only',
+    lock_sub: 'Enter your access code to see live signals',
+    mc_txt:   'traders already getting live signals',
+    div_txt:  'Enter your access code',
+    lbl_email:'Your email',
+    lbl_code: 'Access code',
+    btn:      'ACCESS ⚡',
+    err_email:'Please enter a valid email',
+    err_invalid:'Invalid code — contact us to subscribe',
+    err_used: 'Code already used on another device',
+    err_expired:'Code expired — contact us to renew',
+    loading:  'VERIFYING...',
+    success:  'Welcome! Loading your signals...',
+    footer:   '<strong>Gold · BTC</strong> · Premium signals · Real-time alerts<br>Wave · Crypto · $100/month',
+  },
+  fr: {
+    hero_sub: 'Setups haute probabilité — directement sur votre téléphone.',
+    lock_txt: 'Membres uniquement',
+    lock_sub: "Entrez votre code d'accès pour voir les signaux",
+    mc_txt:   'traders reçoivent déjà les signaux en direct',
+    div_txt:  "Entrez votre code d'accès",
+    lbl_email:'Votre email',
+    lbl_code: "Code d'accès",
+    btn:      'ACCÉDER ⚡',
+    err_email:'Entrez un email valide',
+    err_invalid:'Code invalide — contactez-nous pour vous abonner',
+    err_used: 'Code déjà utilisé sur un autre appareil',
+    err_expired:'Code expiré — contactez-nous pour renouveler',
+    loading:  'VÉRIFICATION...',
+    success:  'Bienvenue! Chargement de vos signaux...',
+    footer:   '<strong>Gold · BTC</strong> · Signaux premium · Alertes en temps réel<br>Wave · Crypto · 100$/mois',
+  }
+};
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('14t_lang', l);
+  const t = L[l];
+  document.getElementById('hero-sub').textContent    = t.hero_sub;
+  document.getElementById('lock-txt').textContent    = t.lock_txt;
+  document.getElementById('lock-sub').textContent    = t.lock_sub;
+  document.getElementById('div-txt').textContent     = t.div_txt;
+  document.getElementById('lbl-email').textContent   = t.lbl_email;
+  document.getElementById('lbl-code').textContent    = t.lbl_code;
+  document.getElementById('access-btn').childNodes[0].textContent = t.btn;
+  document.getElementById('footer-txt').innerHTML    = t.footer;
+  document.getElementById('lang-en').classList.toggle('active', l==='en');
+  document.getElementById('lang-fr').classList.toggle('active', l==='fr');
+  // Update member count text
+  const count = document.getElementById('mc-count').textContent;
+  document.getElementById('mc-text').innerHTML = `<strong id="mc-count">${count}</strong> ${t.mc_txt}`;
+}
+
+function clearErrors() {
+  document.getElementById('error-msg').textContent = '';
+  document.getElementById('email-input').classList.remove('error');
+  document.getElementById('code-input').classList.remove('error');
+}
+
+function getDeviceId() {
+  let id = localStorage.getItem('14t_device_id');
+  if (!id) { id = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2,9); localStorage.setItem('14t_device_id', id); }
+  return id;
+}
+
+async function submitAccess() {
+  const email  = document.getElementById('email-input').value.trim().toLowerCase();
+  const code   = document.getElementById('code-input').value.trim().toUpperCase();
+  const btn    = document.getElementById('access-btn');
+  const errEl  = document.getElementById('error-msg');
+  const succEl = document.getElementById('success-msg');
+  const t      = L[lang];
+
+  if (!email || !email.includes('@')) { document.getElementById('email-input').classList.add('error'); errEl.textContent = t.err_email; return; }
+  if (!code || code.length < 4) { document.getElementById('code-input').classList.add('error'); errEl.textContent = t.err_invalid; return; }
+
+  btn.disabled = true;
+  btn.childNodes[0].textContent = t.loading + ' ';
+
+  try {
+    const res = await fetch(`${SERVER}/api/activate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code, deviceId: getDeviceId() })
+    });
+    const d = await res.json();
+
+    if (d.ok) {
+      document.getElementById('email-input').classList.add('success');
+      document.getElementById('code-input').classList.add('success');
+      succEl.style.display = 'block';
+      succEl.textContent = t.success;
+      const expTs = d.expiresAt ? new Date(d.expiresAt).getTime() : Date.now() + 30*24*60*60*1000;
+      localStorage.setItem('14t_access',     code);
+      localStorage.setItem('14t_email',      email);
+      localStorage.setItem('14t_join',       d.joinDate || new Date().toISOString());
+      localStorage.setItem('14t_access_exp', expTs.toString());
+      setTimeout(() => { window.location.href = '/'; }, 1200);
+    } else {
+      const errMap = { invalid: t.err_invalid, used: t.err_used, expired: t.err_expired };
+      errEl.textContent = errMap[d.reason] || t.err_invalid;
+      document.getElementById('code-input').classList.add('error');
+      btn.disabled = false;
+      btn.childNodes[0].textContent = t.btn;
+    }
+  } catch(e) {
+    errEl.textContent = 'Connection error — try again';
+    btn.disabled = false;
+    btn.childNodes[0].textContent = t.btn;
+  }
+}
+
+// Fetch live prices
+async function fetchPrices() {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+    const d = await r.json();
+    const p = d.bitcoin.usd;
+    const c = parseFloat(d.bitcoin.usd_24h_change.toFixed(2));
+    document.getElementById('btc-price').textContent = '$' + Math.round(p).toLocaleString();
+    const cel = document.getElementById('btc-change');
+    cel.textContent = (c>=0?'+':'')+c+'%';
+    cel.style.color = c>=0?'var(--green)':'var(--red)';
+  } catch(e) {}
+  try {
+    const r = await fetch('https://api.metals.live/v1/spot/gold');
+    const d = await r.json();
+    const p = d[0]?.price;
+    if (p) document.getElementById('gold-price').textContent = '$'+parseFloat(p).toFixed(2);
+  } catch(e) {}
+  // Session
+  const nyH = parseInt(new Date().toLocaleTimeString('en-US',{timeZone:'America/New_York',hour12:false,hour:'2-digit'}));
+  let session, active;
+  if (nyH>=8&&nyH<17) { session='NY'; active='Open'; }
+  else if (nyH>=2&&nyH<8) { session='London'; active='Open'; }
+  else if (nyH>=19||nyH<2) { session='Asia'; active='Open'; }
+  else { session='Closed'; active='--'; }
+  document.getElementById('session-val').textContent  = session;
+  document.getElementById('session-status').textContent = active;
+}
+
+// Fetch member count + stats from server
+async function fetchStats() {
+  try {
+    const r = await fetch(`${SERVER}/api/members`);
+    const d = await r.json();
+    if (d.count) document.getElementById('mc-count').textContent = d.count;
+  } catch(e) {}
+  try {
+    const r = await fetch(`${SERVER}/api/state`);
+    const d = await r.json();
+    const sigs = (d.signals||[]);
+    const tps = sigs.filter(s=>s.type==='tp_hit').length;
+    const sls = sigs.filter(s=>s.type==='sl_hit').length;
+    const total = tps+sls;
+    if (total>0) {
+      document.getElementById('res-winrate').textContent = Math.round(tps/total*100)+'%';
+      document.getElementById('res-signals').textContent = total;
+    }
+  } catch(e) {}
+}
+
+// Init
+setLang(lang);
+fetchPrices();
+fetchStats();
+setInterval(fetchPrices, 15000);
+
+// Check if already has valid access
+const saved = localStorage.getItem('14t_access');
+const exp   = parseInt(localStorage.getItem('14t_access_exp') || '0');
+if (saved && exp > Date.now()) window.location.href = '/';
+</script>
+
+
+</body></html>
